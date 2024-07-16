@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
+import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.embedding.engine.dart.DartExecutor.DartEntrypoint
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -31,12 +32,16 @@ class MainActivity : AppCompatActivity() {
         val flutterEngineID = "module_flutter_engine"
 
         val flutterEngine = FlutterEngine(/* context = */ this).also {
+            it.navigationChannel.setInitialRoute("/$entryMethod")
             it.dartExecutor.executeDartEntrypoint(
-                DartEntrypoint(
-                    it.dartExecutor.binaryMessenger.toString(),
-                    entryMethod?:"main"
-                )
+                DartEntrypoint.createDefault()
             )
+//            it.dartExecutor.executeDartEntrypoint(
+//                DartEntrypoint(
+//                    it.dartExecutor.binaryMessenger.toString(),
+//                    entryMethod?:"main"
+//                )
+//            )
         }
         FlutterEngineCache
             .getInstance()
